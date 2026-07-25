@@ -1,9 +1,9 @@
 import json
-import os
 
 
 def analyze_text(text: str):
-    positive_words = [
+
+    positive = [
         "love",
         "good",
         "great",
@@ -11,22 +11,22 @@ def analyze_text(text: str):
         "happy"
     ]
 
-    negative_words = [
+    negative = [
         "bad",
         "hate",
         "sad",
         "error"
     ]
 
-    lower = text.lower()
-
     score = 0
 
-    for word in positive_words:
+    lower = text.lower()
+
+    for word in positive:
         if word in lower:
             score += 1
 
-    for word in negative_words:
+    for word in negative:
         if word in lower:
             score -= 1
 
@@ -50,9 +50,15 @@ def analyze_text(text: str):
 
 def main(context):
 
-    request = json.loads(
-        context.req.body
-    )
+    print("BODY:", context.req.body_text)
+
+    if context.req.body_text:
+        request = json.loads(
+            context.req.body_text
+        )
+    else:
+        request = {}
+
 
     text = request.get(
         "text",
