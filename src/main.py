@@ -30,14 +30,12 @@ def analyze_text(text: str):
         if word in lower:
             score -= 1
 
-
     if score > 0:
         sentiment = "positive"
     elif score < 0:
         sentiment = "negative"
     else:
         sentiment = "neutral"
-
 
     return {
         "status": "ok",
@@ -50,23 +48,40 @@ def analyze_text(text: str):
 
 def main(context):
 
-    print("BODY:", context.req.body_text)
+    context.log(
+        f"body={context.req.body}"
+    )
 
-    if context.req.body_text:
-        request = json.loads(
-            context.req.body_text
-        )
-    else:
-        request = {}
-
-
-    text = request.get(
-        "text",
-        ""
+    context.log(
+        f"body_text={context.req.body_text}"
     )
 
 
-    result = analyze_text(text)
+    text = ""
 
 
-    return context.res.json(result)
+    # вариант 1: HTTP body
+    if context.req.body_text:
+        try:
+            data = json.loads(
+                context.req.body_text
+            )
+            text = data.get("text", "")
+        except Exception:
+            pass
+
+
+    # вариант 2: Appwrite execution data
+    if not text and context.req.body:
+        try:
+            data = json.loads(
+                context.req.body
+            )
+            text = data.get("text", "")
+        except Exception:
+            pass
+
+
+    return context.res.json(
+        analyze_text(text)
+    )

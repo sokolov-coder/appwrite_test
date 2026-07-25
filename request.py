@@ -14,11 +14,10 @@ URL = (
     f"{FUNCTION_ID}/executions"
 )
 
-
 payload = {
-    "data": json.dumps({
+    "data": {
         "text": "I love Python programming"
-    })
+    }
 }
 
 
@@ -38,4 +37,14 @@ response = requests.post(
 
 print("STATUS:", response.status_code)
 
-print(response.json())
+result = response.json()
+
+print(result)
+
+
+if result.get("responseBody"):
+    print(
+        json.loads(
+            result["responseBody"]
+        )
+    )
