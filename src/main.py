@@ -1,6 +1,6 @@
 import json
 
-from service.tradingview import get_ideas
+from src.service.tradingview import get_ideas
 
 
 def main(context):
