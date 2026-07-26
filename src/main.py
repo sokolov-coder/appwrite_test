@@ -1,13 +1,18 @@
-import os
+import json
+
+from tradingview import get_ideas
+
 
 def main(context):
-    files = []
 
-    for root, dirs, filenames in os.walk("."):
-        for f in filenames:
-            files.append(os.path.join(root, f))
+    request = json.loads(context.req.body_text)
+
+    ticker = request.get("ticker", "IVAT")
+
+    ideas = get_ideas(ticker)
 
     return context.res.json({
-        "cwd": os.getcwd(),
-        "files": files
+        "ticker": ticker,
+        "count": len(ideas),
+        "ideas": ideas,
     })

@@ -1,4 +1,4 @@
-from ..config.session_config import get_session
+from session_config import get_session
 
 
 def get_ideas(ticker: str, limit: int = 5):
